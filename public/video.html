@@ -46,7 +46,7 @@
         myVideo.srcObject = localStream;
 
         // Créer un PeerJS
-        peer = new Peer(undefined, { host: 'smart-tech.innovation-mouride.com', port: 7000, path: '/peerjs' });
+        peer = new Peer(undefined, { host: 'smart-tech.innovation-mouride.com', port: 443, path: '/peerjs', secure: true });
 
         peer.on('open', id => {
           console.log('Mon Peer ID:', id);

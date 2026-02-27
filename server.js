@@ -15,6 +15,7 @@ const app = express()
 const server = http.createServer(app)
 // Créer un serveur PeerJS
 const peerServer = ExpressPeerServer(server, { path: '/peerjs' });
+
 const io = new Server(server, {
   cors: {
     origin: "https://smart-tech.innovation-mouride.com",

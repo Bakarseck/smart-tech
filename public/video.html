@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<title>SmarttechConnect | Appel Vidéo</title>
-<style>
-  body { display: flex; flex-direction: column; align-items: center; font-family: Arial; background: #f0f2f5; }
-  video { border: 1px solid #ccc; margin: 10px; width: 400px; height: 300px; }
-</style>
+  <meta charset="UTF-8">
+  <title>SmarttechConnect | Appel Vidéo</title>
 </head>
 <body>
-<h2>Appel Vidéo</h2>
-<video id="localVideo" autoplay muted></video>
-<video id="remoteVideo" autoplay></video>
-<script src="/socket.io/socket.io.js"></script>
-<script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-<script>
-const socket = io();
-let localStream;
+  <h2>Appel vidéo</h2>
+  <video id="localVideo" autoplay muted></video>
+  <video id="remoteVideo" autoplay></video>
 
-// Récupérer l'utilisateur
-fetch("/getUsername").then(r=>r.json()).then(user=>window.username=user.username);
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+  <script>
+    const socket = io();
 
-// Créer PeerJS
-const peer = new Peer(undefined, { path: '/peerjs', host: '/', port: 3000 });
-
-// Récupérer la caméra/micro
-navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
-  localStream = stream;
-  document.getElementById('localVideo').srcObject = stream;
-
-  peer.on('call', call => {
-    call.answer(stream); // répondre avec notre stream
-    call.on('stream', remoteStream => {
-      document.getElementById('remoteVideo').srcObject = remoteStream;
+    const peer = new Peer(undefined, {
+      host: '/',   // le même domaine
+      port: 7000,  // ton port serveur
+      path: '/peerjs'
     });
-  });
-});
 
-// Se connecter à un autre utilisateur (à adapter pour plusieurs)
-peer.on('open', id => {
-  console.log("Mon Peer ID:", id);
-  // Ici tu peux envoyer ton ID à ton interlocuteur via Socket.IO pour initier l'appel
-});
-</script>
+    const localVideo = document.getElementById('localVideo');
+    const remoteVideo = document.getElementById('remoteVideo');
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      .then(stream => {
+        localVideo.srcObject = stream;
+
+        peer.on('call', call => {
+          call.answer(stream);
+          call.on('stream', remoteStream => {
+            remoteVideo.srcObject = remoteStream;
+          });
+        });
+
+        socket.on('user-connected', userId => {
+          const call = peer.call(userId, stream);
+          call.on('stream', remoteStream => {
+            remoteVideo.srcObject = remoteStream;
+          });
+        });
+      });
+
+    peer.on('open', id => {
+      socket.emit('join-video-room', id);
+    });
+
+    socket.on('user-disconnected', userId => {
+      console.log('Utilisateur déconnecté :', userId);
+      remoteVideo.srcObject = null;
+    });
+  </script>
 </body>
 </html>

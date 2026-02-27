@@ -29,7 +29,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
   <script>
-    const socket = io();
+    const socket = io.connect('http://localhost:7000');
     const joinBtn = document.getElementById("joinBtn");
     const myVideo = document.getElementById("myVideo");
     const peerVideo = document.getElementById("peerVideo");

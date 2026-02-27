@@ -125,4 +125,4 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => console.log("Utilisateur déconnecté Socket.IO"));
 });
 
-server.listen(3000, () => console.log("Serveur lancé sur http://localhost:3000"))
+server.listen(7000, () => console.log("Serveur lancé sur http://localhost:3000"))

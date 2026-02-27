@@ -8,12 +8,13 @@ const { Server } = require("socket.io")
 
 const { ExpressPeerServer } = require("peer");
 
-// Créer un serveur PeerJS
-const peerServer = ExpressPeerServer(server, { path: '/peerjs' });
+
 
 
 const app = express()
 const server = http.createServer(app)
+// Créer un serveur PeerJS
+const peerServer = ExpressPeerServer(server, { path: '/peerjs' });
 const io = new Server(server)
 
 app.use(express.json())

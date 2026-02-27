@@ -1,0 +1,25 @@
+### Test accueil
+GET http://localhost:3000/
+Accept: text/html
+
+### Inscription d'un utilisateur
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+  "username": "bakar",
+  "email": "bakar@example.com",
+  "password": "123456"
+}
+
+### Connexion d'un utilisateur
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "bakar@example.com",
+  "password": "123456"
+}
+
+### Test session (endpoint protégé exemple)
+GET http://localhost:3000/dashboard

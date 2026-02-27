@@ -29,7 +29,7 @@
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
   <script>
-    const socket = io.connect('https://smart-tech.innovation-mouride.com');
+    const socket = io.connect('https://smart-tech.innovation-mouride.com:7000');
     const joinBtn = document.getElementById("joinBtn");
     const myVideo = document.getElementById("myVideo");
     const peerVideo = document.getElementById("peerVideo");
@@ -46,7 +46,7 @@
         myVideo.srcObject = localStream;
 
         // Créer un PeerJS
-        peer = new Peer(undefined, { host: '/', port: 7000, path: '/peerjs' });
+        peer = new Peer(undefined, { host: 'smart-tech.innovation-mouride.com', port: 7000, path: '/peerjs' });
 
         peer.on('open', id => {
           console.log('Mon Peer ID:', id);
